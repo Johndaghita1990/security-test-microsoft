@@ -1,6 +1,14 @@
-export default {
-  async fetch(request) {
-    const targetUrl = 'https://security-test-microsoft.pages.dev'; // Your Pages URL
-    return Response.redirect(targetUrl, 302);
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "security-test-microsoft",
+  "compatibility_date": "2026-06-24",
+  "observability": {
+    "enabled": true
   },
-};
+  "assets": {
+    "directory": "."
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}
